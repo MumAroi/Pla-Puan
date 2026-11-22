@@ -8,6 +8,7 @@ description: Develop and review the Pla-Puan Rust and Bevy 2D top-down pixel art
 ## Project direction
 
 - Build a 2D top-down pixel art game in Rust with Bevy.
+- Online co-op with friends is a product requirement. Teach and implement it incrementally; do not assume the game will remain single-player.
 - Read Cargo.toml and the affected code before changing implementation. Match the project's Bevy version; check official documentation for uncertain APIs. Do not upgrade dependencies as part of unrelated work.
 - Explain choices in Thai using plain language. Introduce ECS terms when needed; the user is learning Bevy.
 
@@ -45,6 +46,15 @@ This is a growth guide, not a requirement to create unused files or directories.
 - Add explicit system ordering when one system depends on another's results. Do not rely on registration order or chain unrelated systems.
 - Use state conditions when menus, loading, pausing, or gameplay require them. Scope spawning and cleanup to the correct lifecycle so re-entering a state does not duplicate entities.
 - Use frame delta time for continuous movement. Use a fixed schedule when simulation requires a fixed step, and keep input, simulation, and rendering timing deliberate.
+
+## Online co-op boundaries
+
+- Defer Host/Client implementation until the create-room/join-room learning milestone. Keep the already installed Lightyear dependency, but do not restore startup networking modes or room scaffolding before that step.
+- Player marks any player character, not exclusively the local one. Filter local keyboard input and camera targeting by explicit local control; do not drive all Player entities from the same keyboard.
+- Keep local input collection separate from shared movement/gameplay simulation when introducing multiplayer behavior. Remote characters must be driven by the chosen networking authority, not local keyboard input.
+- Distinguish player identity, ownership, and simulation authority. Do not use raw local Entity IDs as stable cross-machine identity; use the networking layer's entity mapping or explicit network identifiers.
+- Host-authoritative co-op is a candidate, not a finalized decision. Select topology and networking dependencies when implementing a concrete networking milestone, checking Bevy version compatibility first.
+- Work one learning step at a time. Do not add networking dependencies, prediction, rollback, lobbies, or matchmaking merely to prepare for later. Clearly label local-only prototypes as such.
 
 ## Practical clean code
 
